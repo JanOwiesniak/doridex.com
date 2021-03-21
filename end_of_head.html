@@ -1,0 +1,146 @@
+<!-- Load cookieconsent -->
+<script src="https://cdn.jsdelivr.net/gh/JanOwiesniak/doridex.com@master/js/cookieconsent.js"></script>
+
+<!-- Configure cookieconsent -->
+<script>
+    // obtain cookieconsent plugin
+    var cc = initCookieConsent();
+
+    // run plugin with config object
+    cc.run({
+        autorun: true,
+        delay: 0,
+        current_lang: "en",
+        theme_css: "https://raw.githubusercontent.com/JanOwiesniak/doridex.com/master/css/cookieconsent.css",
+        autoclear_cookies: true,
+        autoload_css: true,
+        cookie_expiration: 365,
+
+        onAccept: function (cookies) {
+            if (cc.allowedCategory("analytics_cookies")) {
+                cc.loadScript("https://www.googletagmanager.com/gtag/js?id=UA-116505582-7", function () {
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag() {
+                        dataLayer.push(arguments);
+                    }
+                    gtag("js", new Date());
+
+                    gtag("config", "UA-116505582-7");
+                });
+            }
+        },
+
+        languages: {
+            en: {
+                consent_modal: {
+                    title: "We use cookies.",
+                    description:
+                        'This website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only upon approval. I agree that companies associated with this website and third parties create pseudonymized user profiles for website personalization, market research and advertising. Although the generated information can be forwarded to third parties, it can not be combined with personal information. Detailed information and how to withdraw your consent can be found in the privacy policy of the site.',
+                    primary_btn: {
+                        text: "Accept",
+                        role: "accept_all", //'accept_selected' or 'accept_all'
+                    },
+                    secondary_btn: {
+                        text: "Settings",
+                        role: "settings", //'settings' or 'accept_necessary'
+                    },
+                },
+                settings_modal: {
+                    title: "Cookie preferences",
+                    save_settings_btn: "Save settings",
+                    accept_all_btn: "Accept all",
+                    cookie_table_headers: [{ col1: "Name" }, { col2: "Domain" }, { col3: "Expiration" }, { col4: "Description" }, { col5: "Type" }],
+                    blocks: [
+                        {
+                            title: "Cookie usage",
+                            description: "We use cookies to ensure the basic functionalities of the website and to enhance your online experience. You can choose for each category to opt-in/out whenever you want.",
+                        },
+                        {
+                            title: "Strictly necessary cookies",
+                            description: "These cookies are essential for the proper functioning of my website. Without these cookies, the website would not work properly.",
+                            toggle: {
+                                value: "necessary_cookies",
+                                enabled: true,
+                                readonly: true,
+                            },
+                            cookie_table: [
+                                {
+                                    col1: "cc_cookie",
+                                    col2: "doridex.com",
+                                    col3: "1 year",
+                                    col4:
+                                        'Used by doridex.com to handle users cookie preferences. User can choose between different level of cookies e.g. "Strictly necessary cookies" only or "Analytics cookies". Cookie Banner will be displayed as long as this cookie is not set yet.',
+                                    col5: "Permanent cookie",
+                                }
+                            ],
+                        },
+                        {
+                            title: "Analytics cookies",
+                            description: "These cookies cookies collect information about how you use the website, which pages you visited and which links you clicked on. All of the data is anonymized and cannot be used to identify you.",
+                            toggle: {
+                                value: "analytics_cookies",
+                                enabled: false,
+                                readonly: false,
+                            },
+                            cookie_table: [
+                                {
+                                    col1: "_ga",
+                                    col2: "google.com",
+                                    col3: "2 years",
+                                    col4: "Used by Google Analytics to identify unique users",
+                                    col5: "Permanent cookie",
+                                },
+                                {
+                                    col1: "_ga_FYRR3F0BZK",
+                                    col2: "google.com",
+                                    col3: "2 years",
+                                    col4: "Used by Google Analytics to identify unique users",
+                                    col5: "Permanent cookie",
+                                },
+                                {
+                                    col1: "_gat_gtag_UA_116505582_7",
+                                    col2: "google.com",
+                                    col3: "1 minute",
+                                    col4: "Used by Google Tag Manager to store and track conversions",
+                                    col5: "Permanent cookie",
+                                },
+                                {
+                                    col1: "_gid",
+                                    col2: "google.com",
+                                    col3: "1 day",
+                                    col4: "Used by Google Analytics to count and track pageviews",
+                                    col5: "Permanent cookie",
+                                },
+                            ],
+                        },
+                    ],
+                },
+            },
+        },
+    });
+
+    document.addEventListener("DOMContentLoaded", function(event) { 
+        document.getElementById("show-cookie-settings").addEventListener("click", function() {
+          deleteAllCookies();
+          window.location.reload(false);
+      });
+    });
+
+    // https://stackoverflow.com/a/33366171/4439838
+    function deleteAllCookies () {
+      var cookies = document.cookie.split("; ");
+      for (var c = 0; c < cookies.length; c++) {
+        var d = window.location.hostname.split(".");
+        while (d.length > 0) {
+            var cookieBase = encodeURIComponent(cookies[c].split(";")[0].split("=")[0]) + '=; expires=Thu, 01-Jan-1970 00:00:01 GMT; domain=' + d.join('.') + ' ;path=';
+            var p = location.pathname.split('/');
+            document.cookie = cookieBase + '/';
+            while (p.length > 0) {
+                document.cookie = cookieBase + p.join('/');
+                p.pop();
+            };
+            d.shift();
+        }
+      }
+    }
+</script>
